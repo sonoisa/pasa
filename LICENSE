@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2018 Isao Sonobe
+Copyright (c) 2017 Takeuchi-Lab-LM
+Copyright (c) 2018, Isao Sonobe (porting scala to python)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

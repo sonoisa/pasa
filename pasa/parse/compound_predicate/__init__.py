@@ -1,0 +1,1 @@
+from .synonym import Synonym
