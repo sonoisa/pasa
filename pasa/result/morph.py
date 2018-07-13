@@ -32,9 +32,9 @@ class Morph(object):
             self.pos4 = pos4
             pos += "," + pos4
         if ctype is not "*":
-            self.cform = ctype
+            self.ctype = ctype
         if cform is not "*":
-            self.ctype = cform
+            self.cform = cform
         self.pos = pos # 品詞，品詞細分類1，品詞細分類2，品詞細分類3
         if ne is not None:
             self.ne = ne

@@ -47,7 +47,7 @@ class Basic(object):
             return "verb"
         elif any(m.pos.find("形容詞") >= 0 or m.pos.find("形容詞,自立") >= 0 or m.pos.find("形容動詞語幹") >= 0 for m in morphs):
             return "adjective"
-        elif any(m.pos.find("特殊・ダ") >= 0 or m.pos.find("特殊・デス") >= 0 or m.cform.find("判定詞") >= 0 for m in morphs):
+        elif any(m.cform.find("特殊・ダ") >= 0 or m.cform.find("特殊・デス") >= 0 or m.cform.find("判定詞") >= 0 for m in morphs):
             return "copula"
         else:
             return "elem"
@@ -57,7 +57,7 @@ class Basic(object):
         ctype = chunk.ctype
         if ctype == "copula":
             return "".join(
-                map(lambda m: m.surface if m.base == "*" else morph.base,
+                map(lambda m: m.surface if m.base == "*" else m.base,
                     filter(lambda m: m.pos.find("名詞") >= 0, chunk.morphs)))
         elif ctype == "verb":
             morphs = list(filter(lambda m: m.base == "する", chunk.morphs))

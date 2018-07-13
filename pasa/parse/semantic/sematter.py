@@ -53,11 +53,11 @@ class Sematter(object):
                 schunk = list(filter(lambda c: c.part == "が", chunk.modifiedchunks))
                 if schunk:
                     schunk[0].semrole.append("対象")
-            elif semantics[1] == "位置変化" and semantics[2] == "位置変化（物理）（人物間）" and semantics[3] == "他者からの所有物の移動":
-                if not any("着点" in c.semrole for c in chunk.modifiedchunks):
-                    schunk = list(filter(lambda c: "動作主" in c.semrole or "経験者" in c.semrole, chunk.modifiedchunks))
-                    if schunk:
-                        schunk[0].semrole.append("着点")
+        elif semantics[1] == "位置変化" and semantics[2] == "位置変化（物理）（人物間）" and semantics[3] == "他者からの所有物の移動":
+            if not any("着点" in c.semrole for c in chunk.modifiedchunks):
+                schunk = list(filter(lambda c: "動作主" in c.semrole or "経験者" in c.semrole, chunk.modifiedchunks))
+                if schunk:
+                    schunk[0].semrole.append("着点")
 
     # 助詞の言い換え候補があるものに対して，言い換えの助詞を付与
     def setAnotherPart(self, chunks):

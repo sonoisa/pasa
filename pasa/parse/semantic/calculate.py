@@ -33,7 +33,7 @@ class Calculate(object):
             insts.append(x)
             comb = list(filter(lambda arg: not ((arg[1].noun + arg[1].part) == (x[1].noun + x[1].part) or arg[2] == x[2]), comb))
 
-        similar = reduce(lambda s, i: s + i[0], insts, 0)
+        similar = reduce(lambda s, i: s + i[0], insts, 0.0)
         return semantic, similar, insts
 
     # 入力文と事例の項のすべての組み合わせの項類似度を求める
@@ -50,7 +50,7 @@ class Calculate(object):
         nounsimilar = self.getNounSimilar(icase, chunk)
         partsimilar = self.getPartSimilar(icase, chunk)
         surfsimilar = self.getSurfSimilar(icase, chunk)
-        similar = partsimilar * (surfsimilar + partsimilar + nounsimilar) * icase.weight
+        similar = round(partsimilar * (surfsimilar + partsimilar + nounsimilar) * icase.weight, 6)
         return similar
 
     # 名詞のカテゴリーによる類似度
