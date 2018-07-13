@@ -24,19 +24,36 @@ class Tagger(object):
     # @return カテゴリ
     def parseCategory(self, linkchunk):
         category = self.categorys.getCates(linkchunk.main)
+
+        if any(morph.pos in ["名詞,接尾,助数詞", "名詞,数"] for morph in linkchunk.morphs):
+            if any(morph.surface in ["年", "月", "日", "時", "分", "秒"] for morph in linkchunk.morphs):
+                category.append("時間")
+            else:
+                category.append("数値")
+
         for morph in linkchunk.morphs:
             pos = morph.pos
-            if pos in ["名詞,接尾,助数詞", "名詞,数"]:
-                if morph.surface in ["年", "月", "日", "時", "分", "秒"]:
-                    category.append("時間")
-                else:
-                    category.append("数値")
-            elif pos in ["名詞,固有名詞,人名", "名詞,接尾,人名"]:
+            if pos in ["名詞,固有名詞,人名", "名詞,接尾,人名"]:
                 category.append("人")
             elif pos in ["名詞,固有名詞,地域", "名詞,接尾,地域"]:
                 category.append("場所")
             elif pos == "名詞,固有名詞,組織":
                 category.append("組織")
+
+        # for morph in linkchunk.morphs:
+        #     pos = morph.pos
+        #     if pos in ["名詞,接尾,助数詞", "名詞,数"]:
+        #         if morph.surface:
+        #             category.append("時間")
+        #         else:
+        #             category.append("数値")
+        #     elif pos in ["名詞,固有名詞,人名", "名詞,接尾,人名"]:
+        #         category.append("人")
+        #     elif pos in ["名詞,固有名詞,地域", "名詞,接尾,地域"]:
+        #         category.append("場所")
+        #     elif pos == "名詞,固有名詞,組織":
+        #         category.append("組織")
+
         return distinct(category)
 
     # 文節態を解析し取得
