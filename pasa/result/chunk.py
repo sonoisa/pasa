@@ -4,22 +4,22 @@
 class Chunk(object):
     def __init__(self, id, link, head, fanc, score):
         # 必須な基本情報
-        self.id = id #文節のid
-        self.surface = "" #文節の表層
-        self.morphs = [] #文節内の形態素
-        self.modifyingchunk = None #係りの文節
-        self.modifiedchunks = [] #受けの文節
+        self.id = id    # 文節のid
+        self.surface = ""   # 文節の表層
+        self.morphs = []   # 文節内の形態素
+        self.modifyingchunk = None  # 係りの文節
+        self.modifiedchunks = []    # 受けの文節
 
         # あんまりいらない情報(?)
-        self.link = link #係り先
-        self.head = head #主要語
-        self.fanc = fanc #機能語
-        self.score = score #係り関係のスコア
+        self.link = link    # 係り先
+        self.head = head    # 主要語
+        self.fanc = fanc    # 機能語
+        self.score = score  # 係り関係のスコア
         # 整理により付与する情報
         self.main = ""
         self.ctype = ""
         self.verb = ""
-        self.part = "" #名詞につく格の情報
+        self.part = ""  # 名詞につく格の情報
 
         # 態などの情報
         self.tense = ""

@@ -7,7 +7,7 @@ class Adjunct(object):
         for modchunk in modifiedlinks:
             modchunk.adjunct = self.getAdjunct(modchunk)
             if modchunk.adjunct and (not modchunk.semrole or modchunk.similar <= 2.0):
-                    modchunk.semrole = [modchunk.adjunct]
+                modchunk.semrole = [modchunk.adjunct]
 
     def getAdjunct(self, chunk):
         adjunct = ""
