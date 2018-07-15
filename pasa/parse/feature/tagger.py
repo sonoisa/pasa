@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-from pasa.utils import distinct
-from pasa.result import Category
 
 
 class Tagger(object):
-    def __init__(self, ccharts, categories):
+    def __init__(self, ccharts):
         self.ccharts = ccharts
-        self.categorys = categories
 
     def parse(self, result):
         for chunk in result.chunks:
@@ -15,47 +12,9 @@ class Tagger(object):
             chunk.polarity = self.parsePolarity(chunk)
             chunk.sentelem = self.parseSentElem(chunk)
             chunk.mood = self.parseMood(chunk)
-            chunk.category = self.parseCategory(chunk)
             for morph in chunk.morphs:
                 morph.forms = self.parseCchart(morph)
         return result
-
-    # 文節中に名詞カテゴリが付与できるものがあればカテゴリの種類を返す
-    # @param morphs 文節中の形態素の配列
-    # @return カテゴリ
-    def parseCategory(self, linkchunk):
-        category = self.categorys.get_cates(linkchunk.main)
-
-        if any(morph.pos in ["名詞,接尾,助数詞", "名詞,数"] for morph in linkchunk.morphs):
-            if any(morph.surface in ["年", "月", "日", "時", "分", "秒"] for morph in linkchunk.morphs):
-                category.append(Category("時間", 1.0))
-            else:
-                category.append(Category("数値", 1.0))
-
-        for morph in linkchunk.morphs:
-            pos = morph.pos
-            if pos in ["名詞,固有名詞,人名", "名詞,接尾,人名"]:
-                category.append(Category("人", 1.0))
-            elif pos in ["名詞,固有名詞,地域", "名詞,接尾,地域"]:
-                category.append(Category("場所", 1.0))
-            elif pos == "名詞,固有名詞,組織":
-                category.append(Category("組織", 1.0))
-
-        # for morph in linkchunk.morphs:
-        #     pos = morph.pos
-        #     if pos in ["名詞,接尾,助数詞", "名詞,数"]:
-        #         if morph.surface:
-        #             category.append(Category("時間", 1.0))
-        #         else:
-        #             category.append(Category("数値", 1.0))
-        #     elif pos in ["名詞,固有名詞,人名", "名詞,接尾,人名"]:
-        #         category.append(Category("人", 1.0))
-        #     elif pos in ["名詞,固有名詞,地域", "名詞,接尾,地域"]:
-        #         category.append(Category("場所", 1.0))
-        #     elif pos == "名詞,固有名詞,組織":
-        #         category.append(Category("組織", 1.0))
-
-        return Category.distinct_categories(category)
 
     # 文節態を解析し取得
     # 付与する態

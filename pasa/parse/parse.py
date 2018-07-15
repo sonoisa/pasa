@@ -3,6 +3,7 @@
 from .analyzer import Analyzer
 from .analyzer import Basic
 from .feature import Tagger
+from .feature import Categorizer
 from .idiom import Hiuchi
 from .semantic import Sematter
 from .compound_predicate import Synonym
@@ -12,7 +13,8 @@ class Parse(object):
         self.analyzer = Analyzer()
         self.basic = Basic(dicts.frames)
         self.sematter = Sematter(dicts.frames, dicts.categorys, dicts.nouns)
-        self.tagger = Tagger(dicts.ccharts, dicts.categorys)
+        self.tagger = Tagger(dicts.ccharts)
+        self.categorizer = Categorizer(dicts.categorys)
         self.idom = Hiuchi(dicts.idioms, dicts.filters)
         self.compoundPredicate = Synonym(dicts.compoundPredicates, dicts.filters)
 
@@ -30,7 +32,9 @@ class Parse(object):
         return result
 
     def parseFeature(self, result):
-        return self.tagger.parse(result)
+        result = self.tagger.parse(result)
+        result = self.categorizer.parse(result)
+        return result
 
     def parseIdiom(self, result):
         return self.idom.parse(result)

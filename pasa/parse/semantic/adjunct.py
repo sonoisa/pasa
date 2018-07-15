@@ -27,7 +27,6 @@ class Adjunct(object):
         if not chunk.category:
             return ""
 
-        # todo 最初のカテゴリのみを見ているので良いかどうかをテストする。
         category = chunk.category[0]
         morphs = chunk.morphs
         if category.name == "時間":
