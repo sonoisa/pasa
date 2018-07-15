@@ -10,9 +10,8 @@ class NounStructure(object):
     def parse(self, chunk):
         frame = self.nouns.get_frame(chunk.main)
         if frame is not None:
-            nounset = list(map(
-                lambda instance: self._calculate_snt_similar(instance, chunk, instance.agent[0] if instance.agent else None),
-                frame.instance))
+            nounset = [self._calculate_snt_similar(instance, chunk, instance.agent[0] if instance.agent else None) for instance in
+                frame.instance]
             nounset = max(nounset, key=itemgetter(0))
             self._set_semantic(chunk, nounset[2])
             self._set_frame(nounset)
@@ -23,7 +22,7 @@ class NounStructure(object):
         while any(m[0] > 0 for m in comb):
             x = max(comb, key=itemgetter(0))
             insts.append(x)
-            comb = list(filter(lambda arg: not (arg[1] == x[1] or arg[2] == x[2]), comb))
+            comb = [arg for arg in comb if not (arg[1] == x[1] or arg[2] == x[2])]
 
         similar = reduce(lambda s, i: s + i[0], insts, 0)
         return similar, insts, agent
@@ -34,10 +33,7 @@ class NounStructure(object):
         if chunk.modifyingchunk is not None:
             chunks.append(chunk.modifyingchunk)
 
-        combinations = flatten(list(map(lambda c: list(map(
-            lambda icase: (self._calculate_arg_similar(icase, c), icase, c),
-            instance.cases)),
-        chunks)))
+        combinations = [(self._calculate_arg_similar(icase, c), icase, c) for c in chunks for icase in instance.cases]
 
         return combinations
 
@@ -53,7 +49,7 @@ class NounStructure(object):
         part = icase.part
         if part == "だ" and chunk.ctype == "copula":
             return 1.0
-        elif part == "だ" and chunk.part in ["は", "が"]:
+        elif part == "だ" and chunk.part in {"は", "が"}:
             return 1.0
         elif part == chunk.part:
             return 1.0

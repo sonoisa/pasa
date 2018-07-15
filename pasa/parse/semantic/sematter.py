@@ -51,12 +51,12 @@ class Sematter(object):
         semantics.extend(["", "", "", "", ""])
         if semantics[1] == "位置変化" and semantics[3] == "着点への移動":
             if not any("対象" in c.semrole for c in chunk.modifiedchunks):
-                schunk = list(filter(lambda c: c.part == "が", chunk.modifiedchunks))
+                schunk = [c for c in chunk.modifiedchunks if c.part == "が"]
                 if schunk:
                     schunk[0].semrole.append("対象")
         elif semantics[1] == "位置変化" and semantics[2] == "位置変化（物理）（人物間）" and semantics[3] == "他者からの所有物の移動":
             if not any("着点" in c.semrole for c in chunk.modifiedchunks):
-                schunk = list(filter(lambda c: "動作主" in c.semrole or "経験者" in c.semrole, chunk.modifiedchunks))
+                schunk = [c for c in chunk.modifiedchunks if "動作主" in c.semrole or "経験者" in c.semrole]
                 if schunk:
                     schunk[0].semrole.append("着点")
 
@@ -74,12 +74,12 @@ class Sematter(object):
                     chunk.another_parts = ["が", "を"]
 
     def _get_noun_chunks(self, result):
-        chunks = list(filter(lambda chunk: self.nouns.is_frame(chunk.main), result.chunks))
+        chunks = [chunk for chunk in result.chunks if self.nouns.is_frame(chunk.main)]
         return chunks
 
     # 係り先である節を取得
     def _get_sem_chunks(self, result):
-        chunks = list(filter(lambda c: c.ctype != "elem" and self.frames.is_frame(c.main), result.chunks))
+        chunks = [c for c in result.chunks if c.ctype != "elem" and self.frames.is_frame(c.main)]
         return chunks
 
     # 係り先の節を渡して，その係り元を取得
@@ -88,8 +88,8 @@ class Sematter(object):
         if verbchunk.modifyingchunk is not None:
             linkchunks = [c for c in verbchunk.modifiedchunks]
             if verbchunk.modifyingchunk.ctype == "elem":
-                can = set(map(lambda c: c.part, verbchunk.modifiedchunks))
-                verbchunk.modifyingchunk.another_parts =[p for p in ["が","を","に"] if p not in can]
+                can = {c.part for c in verbchunk.modifiedchunks}
+                verbchunk.modifyingchunk.another_parts =[p for p in {"が","を","に"} if p not in can]
                 linkchunks.append(verbchunk.modifyingchunk)
             return linkchunks
         else:

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from pasa.utils import distinct
 
 
 class Tagger(object):
@@ -24,12 +25,12 @@ class Tagger(object):
     #  - POTENTIAL:可能態
     @staticmethod
     def _parse_voice(chunk):
-        if any(morph.base in ["れる", "られる"] and morph.pos.find("動詞,接尾") >= 0 for morph in chunk.morphs):
+        if any(morph.base in {"れる", "られる"} and morph.pos.find("動詞,接尾") >= 0 for morph in chunk.morphs):
             voice = "PASSIVE"
         elif any(morph.base == "できる" and morph.pos.find("動詞,自立") >= 0 for morph in chunk.morphs):
             voice = "POTENTIAL"
         elif any((morph.base == "せる" and morph.pos.find("動詞,接尾") >= 0) or
-            (morph.base in ["もらう", "いただく"] and morph.pos.find("動詞,非自立") >= 0) for morph in chunk.morphs):
+            (morph.base in {"もらう", "いただく"} and morph.pos.find("動詞,非自立") >= 0) for morph in chunk.morphs):
             voice = "CAUSATIVE"
         elif chunk.ctype is not "elem":
             voice = "ACTIVE"
@@ -42,7 +43,7 @@ class Tagger(object):
     #  - PAST:過去
     @staticmethod
     def _parse_tense(chunk):
-        if any(morph.pos.find("助動詞") >= 0 and morph.base in ["た", "き", "けり"] for morph in chunk.morphs):
+        if any(morph.pos.find("助動詞") >= 0 and morph.base in {"た", "き", "けり"} for morph in chunk.morphs):
             tense = "PAST"
         else:
             tense = "PRESENT" # saitoh 2016/09/06 "" -> "PRESENT"
@@ -54,7 +55,7 @@ class Tagger(object):
     # NEGATIVE:   否定
     @staticmethod
     def _parse_polarity(chunk):
-        if any(morph.pos.find("助動詞") >= 0 and (morph.base in ["ない", "ぬ"] or morph.base.find("まい") >= 0) for morph in chunk.morphs):
+        if any(morph.pos.find("助動詞") >= 0 and (morph.base in {"ない", "ぬ"} or morph.base.find("まい") >= 0) for morph in chunk.morphs):
             polarity = "NEGATIVE"
         elif chunk.ctype != "elem":
             polarity = "AFFIRMATIVE"
@@ -105,9 +106,8 @@ class Tagger(object):
             else:
                 return None
 
-        morphs = list(filter(lambda morph: morph is not None, map(mapper, chunk.morphs)))
-        seen = set()
-        morphs = [m for m in morphs if m not in seen and not seen.add(m)]
+        morphs = [mapper(morph) for morph in chunk.morphs if morph is not None]
+        morphs = distinct([m for m in morphs if m is not None])
 
         if morphs:
             mood = ",".join(morphs)
