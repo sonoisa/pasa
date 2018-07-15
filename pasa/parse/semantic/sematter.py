@@ -4,8 +4,7 @@
 from .noun_structure import NounStructure
 from .adjunct import Adjunct
 from .calculate import Calculate
-from pasa.utils import *
-
+from pasa.result import Category
 
 class Sematter(object):
     def __init__(self, frames, categorys, nouns):
@@ -108,8 +107,10 @@ class Sematter(object):
             if icase.semrole:
                 chunk.semrole.append(icase.semrole)
             chunk.similar = similar
-            if icase.category in chunk.category:
-                chunk.category.insert(0, icase.category)
+            category = chunk.get_category(icase.category)
+            if category is not None:
+                chunk.category.insert(0, category)
+                chunk.category = Category.distinct_categories(chunk.category)
 
     def setArg(self, insts):
         for instset in insts:
@@ -117,6 +118,7 @@ class Sematter(object):
             if icase.arg:
                 chunk.arg.append(icase.arg)
             chunk.similar = similar
-            if icase.category in chunk.category:
-                chunk.category.insert(0, icase.category)
-                chunk.category = distinct(chunk.category)
+            category = chunk.get_category(icase.category)
+            if category is not None:
+                chunk.category.insert(0, category)
+                chunk.category = Category.distinct_categories(chunk.category)

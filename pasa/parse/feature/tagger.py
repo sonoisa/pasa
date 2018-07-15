@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from pasa.utils import distinct
+from pasa.result import Category
 
 
 class Tagger(object):
@@ -23,38 +24,38 @@ class Tagger(object):
     # @param morphs 文節中の形態素の配列
     # @return カテゴリ
     def parseCategory(self, linkchunk):
-        category = self.categorys.getCates(linkchunk.main)
+        category = self.categorys.get_cates(linkchunk.main)
 
         if any(morph.pos in ["名詞,接尾,助数詞", "名詞,数"] for morph in linkchunk.morphs):
             if any(morph.surface in ["年", "月", "日", "時", "分", "秒"] for morph in linkchunk.morphs):
-                category.append("時間")
+                category.append(Category("時間", 1.0))
             else:
-                category.append("数値")
+                category.append(Category("数値", 1.0))
 
         for morph in linkchunk.morphs:
             pos = morph.pos
             if pos in ["名詞,固有名詞,人名", "名詞,接尾,人名"]:
-                category.append("人")
+                category.append(Category("人", 1.0))
             elif pos in ["名詞,固有名詞,地域", "名詞,接尾,地域"]:
-                category.append("場所")
+                category.append(Category("場所", 1.0))
             elif pos == "名詞,固有名詞,組織":
-                category.append("組織")
+                category.append(Category("組織", 1.0))
 
         # for morph in linkchunk.morphs:
         #     pos = morph.pos
         #     if pos in ["名詞,接尾,助数詞", "名詞,数"]:
         #         if morph.surface:
-        #             category.append("時間")
+        #             category.append(Category("時間", 1.0))
         #         else:
-        #             category.append("数値")
+        #             category.append(Category("数値", 1.0))
         #     elif pos in ["名詞,固有名詞,人名", "名詞,接尾,人名"]:
-        #         category.append("人")
+        #         category.append(Category("人", 1.0))
         #     elif pos in ["名詞,固有名詞,地域", "名詞,接尾,地域"]:
-        #         category.append("場所")
+        #         category.append(Category("場所", 1.0))
         #     elif pos == "名詞,固有名詞,組織":
-        #         category.append("組織")
+        #         category.append(Category("組織", 1.0))
 
-        return distinct(category)
+        return Category.distinct_categories(category)
 
     # 文節態を解析し取得
     # 付与する態

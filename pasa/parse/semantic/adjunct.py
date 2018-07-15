@@ -27,14 +27,15 @@ class Adjunct(object):
         if not chunk.category:
             return ""
 
+        # todo 最初のカテゴリのみを見ているので良いかどうかをテストする。
         category = chunk.category[0]
         morphs = chunk.morphs
-        if category == "時間":
+        if category.name == "時間":
             if any(m.surface.find("間") >= 0 for m in morphs):
                 return "場所（時）（間）" # "Time-Line"
             else:
                 return "場所（時）（点）" # "Time-point"
-        elif category == "動作":
+        elif category.name == "動作":
             if any(m.surface.find("間") >= 0 for m in morphs):
                 return "場所（時）（間）" # "Time-Line"
             elif any(m.base in ["前", "後", "まで", "から"] for m in morphs):
@@ -45,13 +46,13 @@ class Adjunct(object):
             return ""
 
     def parseLocation(self, chunk):
-        if "場所" in chunk.category:
+        if chunk.contains_category("場所"):
             return "場所" # "Location"
         else:
             return ""
 
     def parseScene(self, chunk):
-        if "動作" in chunk.category:
+        if chunk.contains_category("動作"):
             if any(m.surface in ["に", "で"] for m in chunk.morphs):
                 return "場所（抽出）" # "Scene"
             else:
@@ -60,7 +61,7 @@ class Adjunct(object):
             return ""
 
     def parseInstrument(self, chunk):
-        if "モノ" in chunk.category:
+        if chunk.contains_category("モノ"):
             if any(m.surface == "で" for m in chunk.morphs):
                 return "手段" # "Instrument"
             else:
@@ -75,7 +76,7 @@ class Adjunct(object):
             return ""
 
     def parseLimit(self, chunk):
-        if "数値" in chunk.category:
+        if chunk.contains_category("数値"):
             if any(m.surface == "で" for m in chunk.morphs):
                 return "限界" # "Limit"
             else:

@@ -34,7 +34,7 @@ class Analyzer(object):
                 read = feature_list(7) if token.feature_list_size >= 8 else surface
                 ne = token.ne
                 morph = Morph(m_id, surface, pos, pos1, pos2, pos3, cform, ctype, base, read, ne)
-                cchunk.addMorph(morph)
+                cchunk.add_morph(morph)
                 m_id += 1
             result.addChunk(cchunk)
         return result

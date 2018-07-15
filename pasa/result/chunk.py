@@ -54,7 +54,7 @@ class Chunk(object):
         else:
             frame = []
 
-        noun_agentiveRole = [
+        noun_agentive_role = [
             str(modchunk.id) + "-" + modchunk.noun_arg + "-" + modchunk.noun_agentiveRole if modchunk.noun_agentiveRole else str(modchunk.id) + "-" + modchunk.noun_arg
             for modchunk in self.modifiedchunks if modchunk.noun_arg
         ]
@@ -90,8 +90,19 @@ class Chunk(object):
             "noun_semantic": self.noun_semantic,
             "noun_semrole": self.noun_semrole,
             "noun_arg": self.noun_arg,
-            "noun_agentiveRole": noun_agentiveRole
+            "noun_agentiveRole": noun_agentive_role
         })
 
-    def addMorph(self, morph):
+    def add_morph(self, morph):
         self.morphs.append(morph)
+
+    def contains_category(self, category_name):
+        """与えられたカテゴリ名を持つカテゴリがあるかどうかを返す。"""
+        return any(category_name == c.name for c in self.category)
+
+    def get_category(self, category_name):
+        """与えられたカテゴリ名を持つカテゴリオブジェクトを返す。"""
+        for c in self.category:
+            if category_name == c.name:
+                return c
+        return None

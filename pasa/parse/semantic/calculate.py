@@ -55,8 +55,9 @@ class Calculate(object):
 
     # 名詞のカテゴリーによる類似度
     def getNounSimilar(self, icase, chunk):
-        if icase.category in chunk.category:
-            return 1.0
+        category = chunk.get_category(icase.category)
+        if category is not None:
+            return category.confidence
         else:
             return 0.0
 

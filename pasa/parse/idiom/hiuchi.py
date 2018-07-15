@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pasa.utils import *
-
+from pasa.result import Category
 
 # 慣用句同定のためのクラス
 # 以下の手順により同定
@@ -108,7 +108,7 @@ class Hiuchi(object):
                 if mchunk not in chunks:
                     modifer.append(mchunk)
 
-        midiom.category = distinct(flatten([chunk.category for chunk in modifer if chunk.category]))
+        midiom.category = Category.distinct_categories(flatten([chunk.category for chunk in modifer if chunk.category]))
 
         self.filtering(midiom)
         for chunk in chunks:
@@ -134,7 +134,7 @@ class Hiuchi(object):
             if feature.polarity == idiom.polarity:
                 return True
         if feature.category:
-            if any(c in idiom.category for c in feature.category):
+            if any(fc == ic.name for ic in idiom.category for fc in feature.category):
                 return True
         if feature.mood:
             if any(m in idiom.mood for m in feature.mood):
