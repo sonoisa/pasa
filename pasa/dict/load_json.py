@@ -6,7 +6,7 @@ from . import frame
 from . import idiom
 from . import verb
 from . import noun
-from . import compoundPredicate
+from . import compound_predicate
 
 import json
 
@@ -19,5 +19,5 @@ class LoadJson(object):
         self.idioms = idiom.Dict(json.load(open(files.idiom, 'r')))
         self.filters = filter.Dict(json.load(open(files.filter, 'r')))
         self.frames = frame.Dict(json.load(open(files.frame, 'r')))
-        self.compoundPredicates = compoundPredicate.Dict(json.load(open(files.compoundPredicate, 'r')))
+        self.compoundPredicates = compound_predicate.Dict(json.load(open(files.compoundPredicate, 'r')))
         self.nouns = noun.Dict(json.load(open(files.noun, 'r')))

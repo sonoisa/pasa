@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pasa.utils import getOrElse
+from pasa.utils import get_or_else
 
 
 # 動詞辞書のためのクラス
@@ -12,9 +12,9 @@ from pasa.utils import getOrElse
 #       -  voice
 class Verb(object):
     def __init__(self, yaml):
-        self.entry = getOrElse(yaml, 'entry', "")
-        self.head = getOrElse(yaml, 'head', "")
-        self.voice = getOrElse(yaml, 'voice', "")
+        self.entry = get_or_else(yaml, 'entry', "")
+        self.head = get_or_else(yaml, 'head', "")
+        self.voice = get_or_else(yaml, 'voice', "")
 
     def __repr__(self):
         return "{{entry={}, head={}, voice={}}}".format(self.entry, self.head, self.voice)

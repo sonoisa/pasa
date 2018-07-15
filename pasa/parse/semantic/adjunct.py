@@ -5,25 +5,26 @@
 class Adjunct(object):
     def parse(self, modifiedlinks):
         for modchunk in modifiedlinks:
-            modchunk.adjunct = self.getAdjunct(modchunk)
+            modchunk.adjunct = self._get_adjunct(modchunk)
             if modchunk.adjunct and (not modchunk.semrole or modchunk.similar <= 2.0):
                 modchunk.semrole = [modchunk.adjunct]
 
-    def getAdjunct(self, chunk):
+    def _get_adjunct(self, chunk):
         adjunct = ""
-        if not adjunct: adjunct = self.parseTime(chunk)
-        if not adjunct: adjunct = self.parseLocation(chunk)
-        if not adjunct: adjunct = self.parseScene(chunk)
-        if not adjunct: adjunct = self.parseInstrument(chunk)
-        if not adjunct: adjunct = self.parseReason(chunk)
-        if not adjunct: adjunct = self.parseLimit(chunk)
-        if not adjunct: adjunct = self.parsePremise(chunk) # 未定義
-        if not adjunct: adjunct = self.parsePurpose(chunk)
-        if not adjunct: adjunct = self.parseModificand(chunk) # 未定義
-        if not adjunct: adjunct = self.parseManner(chunk) # 未定義
+        if not adjunct: adjunct = self._parse_time(chunk)
+        if not adjunct: adjunct = self._parse_location(chunk)
+        if not adjunct: adjunct = self._parse_scene(chunk)
+        if not adjunct: adjunct = self._parse_instrument(chunk)
+        if not adjunct: adjunct = self._parse_reason(chunk)
+        if not adjunct: adjunct = self._parse_limit(chunk)
+        if not adjunct: adjunct = self._parse_premise(chunk) # 未定義
+        if not adjunct: adjunct = self._parse_purpose(chunk)
+        if not adjunct: adjunct = self._parse_modificand(chunk) # 未定義
+        if not adjunct: adjunct = self._parse_manner(chunk) # 未定義
         return adjunct
 
-    def parseTime(self, chunk):
+    @staticmethod
+    def _parse_time(chunk):
         if not chunk.category:
             return ""
 
@@ -44,13 +45,15 @@ class Adjunct(object):
         else:
             return ""
 
-    def parseLocation(self, chunk):
+    @staticmethod
+    def _parse_location(chunk):
         if chunk.contains_category("場所"):
             return "場所" # "Location"
         else:
             return ""
 
-    def parseScene(self, chunk):
+    @staticmethod
+    def _parse_scene(chunk):
         if chunk.contains_category("動作"):
             if any(m.surface in ["に", "で"] for m in chunk.morphs):
                 return "場所（抽出）" # "Scene"
@@ -59,7 +62,8 @@ class Adjunct(object):
         else:
             return ""
 
-    def parseInstrument(self, chunk):
+    @staticmethod
+    def _parse_instrument(chunk):
         if chunk.contains_category("モノ"):
             if any(m.surface == "で" for m in chunk.morphs):
                 return "手段" # "Instrument"
@@ -68,13 +72,15 @@ class Adjunct(object):
         else:
             return ""
 
-    def parseReason(self, chunk):
+    @staticmethod
+    def _parse_reason(chunk):
         if any(m.surface in ["ので", "で"] for m in chunk.morphs):
             return "原因" # "Reason"
         else:
             return ""
 
-    def parseLimit(self, chunk):
+    @staticmethod
+    def _parse_limit(chunk):
         if chunk.contains_category("数値"):
             if any(m.surface == "で" for m in chunk.morphs):
                 return "限界" # "Limit"
@@ -83,7 +89,8 @@ class Adjunct(object):
         else:
             return ""
 
-    def parsePurpose(self, chunk):
+    @staticmethod
+    def _parse_purpose(chunk):
         if any(m.surface == "ため" for m in chunk.morphs):
             for modchunk in chunk.modifiedchunks:
                 if any(m.surface == "の" for m in modchunk.morphs):
@@ -92,14 +99,16 @@ class Adjunct(object):
         else:
             return ""
 
-    def parseAs(self, chunk):
+    @staticmethod
+    def _parse_as(chunk):
         morphs = chunk.morphs
         if any(m.surface.find("として") >= 0 for m in morphs):
             return "As"
         else:
             return ""
 
-    def parseAround(self, chunk):
+    @staticmethod
+    def _parse_around(chunk):
         if chunk.surface == "ことを":
             for c in chunk.modifiedchunks:
                 if c.morphs[-1].surface == "の":
@@ -110,21 +119,25 @@ class Adjunct(object):
         else:
             return ""
 
-    def parsePremise(self, chunk):
+    @staticmethod
+    def _parse_premise(chunk):
         premise = ""
         return premise
 
-    def parseCitation(self, chunk):
+    @staticmethod
+    def _parse_citation(chunk):
         morphs = chunk.morphs
         if any(m.surface.find("引用") >= 0 for m in morphs):
             return "Citation"
         else:
             return ""
 
-    def parseModificand(self, chunk):
+    @staticmethod
+    def _parse_modificand(chunk):
         modify = ""
         return modify
 
-    def parseManner(self, chunk):
+    @staticmethod
+    def _parse_manner(chunk):
         manner = ""
         return manner

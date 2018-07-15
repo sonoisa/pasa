@@ -2,9 +2,9 @@
 
 
 class Chunk(object):
-    def __init__(self, id, link, head, fanc, score):
+    def __init__(self, cid, link, head, fanc, score):
         # 必須な基本情報
-        self.id = id    # 文節のid
+        self.id = cid    # 文節のid
         self.surface = ""   # 文節の表層
         self.morphs = []   # 文節内の形態素
         self.modifyingchunk = None  # 係りの文節

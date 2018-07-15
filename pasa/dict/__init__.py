@@ -6,6 +6,5 @@ from . import filter
 from . import frame
 from . import idiom
 from . import verb
-from . import compoundPredicate
-from .load_yaml import LoadYaml
+from . import compound_predicate
 from .load_json import LoadJson

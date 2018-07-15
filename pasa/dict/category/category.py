@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pasa.utils import getOrElse
+from pasa.utils import get_or_else
 
 
 # カテゴリー辞書のためのクラス
@@ -9,10 +9,10 @@ from pasa.utils import getOrElse
 #    - [Category]<-
 #       - [noun]
 #       -  category_name
-class Category(object):
+class CategoryDict(object):
     def __init__(self, yaml):
-        self.category_name = getOrElse(yaml, 'category_name', "")
-        self.noun = getOrElse(yaml, 'noun', [])
+        self.category_name = get_or_else(yaml, 'category_name', "")
+        self.noun = get_or_else(yaml, 'noun', [])
 
     def __repr__(self):
         return "{{category_name={}, noun={}}}".format(self.category_name, self.noun)

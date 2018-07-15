@@ -36,5 +36,5 @@ class Analyzer(object):
                 morph = Morph(m_id, surface, pos, pos1, pos2, pos3, cform, ctype, base, read, ne)
                 cchunk.add_morph(morph)
                 m_id += 1
-            result.addChunk(cchunk)
+            result.add_chunk(cchunk)
         return result

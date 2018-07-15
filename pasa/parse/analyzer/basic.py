@@ -7,12 +7,12 @@ class Basic(object):
 
     def parse(self, result):
         for chunk in result.chunks:
-            chunk.surface = self.getChunkSurface(chunk)
-            chunk.modifyingchunk = self.getModifyingChunk(result, chunk)
-            chunk.modifiedchunks = self.getModifiedChunks(result, chunk)
-            chunk.ctype = self.getChunkType(chunk)
-            chunk.main = self.getHead(chunk)
-            chunk.part = self.getPart(chunk)
+            chunk.surface = self._get_chunk_surface(chunk)
+            chunk.modifyingchunk = self._get_modifying_chunk(result, chunk)
+            chunk.modifiedchunks = self._get_modified_chunks(result, chunk)
+            chunk.ctype = self._get_chunk_type(chunk)
+            chunk.main = self._get_head(chunk)
+            chunk.part = self._get_part(chunk)
             for morph in chunk.morphs:
                 morph.chunk = chunk
         return result
@@ -20,19 +20,22 @@ class Basic(object):
     # 文節内の形態素の表層をつなげて，文節の表層を取得
     # @param chunk 文節
     # @return 文節の表層
-    def getChunkSurface(self, chunk):
+    @staticmethod
+    def _get_chunk_surface(chunk):
         surface = "".join(map(lambda m: m.surface, chunk.morphs))
         return surface
 
     # 係っている文節を取得
-    def getModifyingChunk(self, result, chunk):
+    @staticmethod
+    def _get_modifying_chunk(result, chunk):
         modifyingchunk = None if chunk.link == -1 else result.chunks[chunk.link]
         return modifyingchunk
 
     # 文節の係りを受けている文節を取得
     # @param chunk 文節
     # @return 係り元の文節集合
-    def getModifiedChunks(self, result, depchunk):
+    @staticmethod
+    def _get_modified_chunks(result, depchunk):
         linkchunks = list(filter(lambda chunk: chunk.link == depchunk.id, result.chunks))
         return linkchunks
 
@@ -41,7 +44,8 @@ class Basic(object):
     #  - adjective: 形容詞，形容動詞
     #  - copula:    コピュラ(AはBだ)
     #  - elem:      その他
-    def getChunkType(self, chunk):
+    @staticmethod
+    def _get_chunk_type(chunk):
         morphs = chunk.morphs
         if any(m.pos.find("動詞,自立") >= 0 for m in morphs):
             return "verb"
@@ -53,7 +57,7 @@ class Basic(object):
             return "elem"
 
     # その文節の主辞となるような語の取得(意味役割付与に使用)
-    def getHead(self, chunk):
+    def _get_head(self, chunk):
         ctype = chunk.ctype
         if ctype == "copula":
             return "".join(
@@ -66,7 +70,7 @@ class Basic(object):
                 sahen = list(map(lambda m: m.surface, filter(lambda m: m.id < morph.id, chunk.morphs)))
                 if sahen:
                     predicate = "".join(sahen[len(sahen) - 2:len(sahen)]) + "する"
-                    if self.frames.isFrame(predicate):
+                    if self.frames.is_frame(predicate):
                         return predicate
                     else:
                         return sahen[-1] + "する"
@@ -82,7 +86,7 @@ class Basic(object):
                         map(lambda m: m.surface,
                             filter(lambda m: m.id == morph.id - 1, chunk.morphs))
                     ) + morph.base
-                if self.frames.isFrame(predicate):
+                if self.frames.is_frame(predicate):
                     return predicate
                 else:
                     return morph.base
@@ -102,7 +106,8 @@ class Basic(object):
     # 文節内の名詞につく格助詞の取得
     # @param chunk 文節
     # @return 文節内の格助詞or係助詞
-    def getPart(self, chunk):
+    @staticmethod
+    def _get_part(chunk):
         morphs = list(filter(lambda m: m.pos.find("格助詞") >= 0 or m.pos.find("係助詞") >= 0 or m.pos2.find("連体化") >= 0 or m.pos.find("助動詞") >= 0 or m.pos.find("副助詞") >= 0 or m.pos.find("判定詞") >= 0, chunk.morphs))
         if len(morphs) > 0:
             return morphs[-1].base

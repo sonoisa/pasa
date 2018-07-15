@@ -12,5 +12,5 @@ class Result(object):
             "chunks": self.chunks
         })
 
-    def addChunk(self, chunk):
+    def add_chunk(self, chunk):
         self.chunks.append(chunk)

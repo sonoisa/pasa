@@ -7,13 +7,13 @@ class Tagger(object):
 
     def parse(self, result):
         for chunk in result.chunks:
-            chunk.voice = self.parseVoice(chunk)
-            chunk.tense = self.parseTense(chunk)
-            chunk.polarity = self.parsePolarity(chunk)
-            chunk.sentelem = self.parseSentElem(chunk)
-            chunk.mood = self.parseMood(chunk)
+            chunk.voice = self._parse_voice(chunk)
+            chunk.tense = self._parse_tense(chunk)
+            chunk.polarity = self._parse_polarity(chunk)
+            chunk.sentelem = self._parse_sent_elem(chunk)
+            chunk.mood = self._parse_mood(chunk)
             for morph in chunk.morphs:
-                morph.forms = self.parseCchart(morph)
+                morph.forms = self._parse_cchart(morph)
         return result
 
     # 文節態を解析し取得
@@ -22,7 +22,8 @@ class Tagger(object):
     #  - CAUSATIVE:使役態
     #  - PASSIVE:  受動態
     #  - POTENTIAL:可能態
-    def parseVoice(self, chunk):
+    @staticmethod
+    def _parse_voice(chunk):
         if any(morph.base in ["れる", "られる"] and morph.pos.find("動詞,接尾") >= 0 for morph in chunk.morphs):
             voice = "PASSIVE"
         elif any(morph.base == "できる" and morph.pos.find("動詞,自立") >= 0 for morph in chunk.morphs):
@@ -39,7 +40,8 @@ class Tagger(object):
     # 時制情報の解析と付与
     # 付与する時制の情報
     #  - PAST:過去
-    def parseTense(self, chunk):
+    @staticmethod
+    def _parse_tense(chunk):
         if any(morph.pos.find("助動詞") >= 0 and morph.base in ["た", "き", "けり"] for morph in chunk.morphs):
             tense = "PAST"
         else:
@@ -50,7 +52,8 @@ class Tagger(object):
     # 付与する極性の情報
     # AFFIRMATIVE:肯定
     # NEGATIVE:   否定
-    def parsePolarity(self, chunk):
+    @staticmethod
+    def _parse_polarity(chunk):
         if any(morph.pos.find("助動詞") >= 0 and (morph.base in ["ない", "ぬ"] or morph.base.find("まい") >= 0) for morph in chunk.morphs):
             polarity = "NEGATIVE"
         elif chunk.ctype != "elem":
@@ -60,9 +63,9 @@ class Tagger(object):
         return polarity
 
     #  形態素の活用型の情報を解析し取得"
-    def parseCchart(self, morph):
+    def _parse_cchart(self, morph):
         if morph.cform:
-            cchart = self.ccharts.getCchart(morph.cform)
+            cchart = self.ccharts.get_cchart(morph.cform)
             if cchart is not None:
                 forms = cchart.form
             else:
@@ -72,7 +75,8 @@ class Tagger(object):
         return forms
 
     # 文要素の情報を解析し取得
-    def parseSentElem(self, chunk):
+    @staticmethod
+    def _parse_sent_elem(chunk):
         last = chunk.morphs[-1]
         if last.cform.find("体言接続") >= 0 or last.pos.find("連体詞") >= 0 or last.pos.find("形容詞") >= 0 or (last.pos.find("助詞,連体化") >= 0 and last.base == "の"):
             sentelem = "ADNOMINAL"
@@ -85,7 +89,8 @@ class Tagger(object):
         return sentelem
 
     # 法情報を解析し取得
-    def parseMood(self, chunk):
+    @staticmethod
+    def _parse_mood(chunk):
         def mapper(morph):
             if morph.cform == "仮定":
                 return "SUBJUNCTIVE"

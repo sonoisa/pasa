@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from .verb import Verb
-from pasa.utils import getOrElse
+from pasa.utils import get_or_else
 
 
 # 動詞辞書のためのクラス
@@ -12,9 +12,9 @@ from pasa.utils import getOrElse
 #       -  voice
 class Verbs(object):
     def __init__(self, yaml):
-        self.verb = list(map(lambda v: Verb(v), getOrElse(yaml, 'verb', [])))
+        self.verb = list(map(lambda v: Verb(v), get_or_else(yaml, 'verb', [])))
 
-    def isVerb(self, verbs):
+    def is_verb(self, verbs):
         for ver in self.verb:
             if verbs and verbs == ver.entry:
                 return True

@@ -16,31 +16,31 @@ class Parse(object):
         self.tagger = Tagger(dicts.ccharts)
         self.categorizer = Categorizer(dicts.categorys)
         self.idom = Hiuchi(dicts.idioms, dicts.filters)
-        self.compoundPredicate = Synonym(dicts.compoundPredicates, dicts.filters)
+        self.compound_predicate = Synonym(dicts.compoundPredicates, dicts.filters)
 
     def parse(self, line):
-        result = self.parseChunk(line)
-        result = self.parseFeature(result)
-        result = self.parseIdiom(result)
-        result = self.parseSemantic(result)
-        result = self.parseCompoundPredicate(result)
+        result = self._parse_chunk(line)
+        result = self._parse_feature(result)
+        result = self._parse_idiom(result)
+        result = self._parse_semantic(result)
+        result = self._parse_compound_predicate(result)
         return result
 
-    def parseChunk(self, line):
+    def _parse_chunk(self, line):
         result = self.analyzer.parse(line)
         result = self.basic.parse(result)
         return result
 
-    def parseFeature(self, result):
+    def _parse_feature(self, result):
         result = self.tagger.parse(result)
         result = self.categorizer.parse(result)
         return result
 
-    def parseIdiom(self, result):
+    def _parse_idiom(self, result):
         return self.idom.parse(result)
 
-    def parseSemantic(self, result):
+    def _parse_semantic(self, result):
         return self.sematter.parse(result)
 
-    def parseCompoundPredicate(self, result):
-        return self.compoundPredicate.parse(result)
+    def _parse_compound_predicate(self, result):
+        return self.compound_predicate.parse(result)

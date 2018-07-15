@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 from .frame import Frame
 
-from pasa.utils import getOrElse
-
 
 class Dict(object):
     def __init__(self, yaml):
         self.dict = list(map(lambda f: Frame(f), yaml['dict']))
 
-    def isFrame(self, noun):
+    def is_frame(self, noun):
         if noun:
             for frame in self.dict:
                 if frame.head == noun or (frame.head + frame.support) == noun or frame.head == noun[0:-1] or (frame.head + frame.support) == noun[0:-1]:
@@ -17,7 +15,7 @@ class Dict(object):
         else:
             return False
 
-    def getFrame(self, noun):
+    def get_frame(self, noun):
         if noun:
             for frame in self.dict:
                 if frame.head == noun or (frame.head + frame.support) == noun or frame.head == noun[0:-1] or (frame.head + frame.support) == noun[0:-1]:
