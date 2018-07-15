@@ -16,9 +16,11 @@ class Calculate(object):
         if frames is None:
             return None
         else:
-            candidates = [(self._calculate_snt_similar(frame.semantic, instance, linkchunks) if frame.instance else (frame.semantic, -1.0, [])) for frame in
-                frames.frame for instance in
-                    frame.instance]
+            candidates = flatten(list(map(
+                lambda frame: list(map(
+                    lambda instance: self._calculate_snt_similar(frame.semantic, instance, linkchunks),
+                    frame.instance)) if frame.instance else [(frame.semantic, -1.0, [])],
+                frames.frame)))
             return max(candidates, key=itemgetter(1))
 
     # 事例の類似度を算出
@@ -28,14 +30,18 @@ class Calculate(object):
         while any(m[0] > 0 for m in comb):
             max_inst = max(comb, key=itemgetter(0))
             insts.append(max_inst)
-            comb = [arg for arg in comb if not ((arg[1].noun + arg[1].part) == (max_inst[1].noun + max_inst[1].part) or arg[2] == max_inst[2])]
+            comb = list(filter(lambda arg: not ((arg[1].noun + arg[1].part) == (max_inst[1].noun + max_inst[1].part) or arg[2] == max_inst[2]), comb))
 
         similar = reduce(lambda s, i: s + i[0], insts, 0.0)
         return semantic, similar, insts
 
     # 入力文と事例の項のすべての組み合わせの項類似度を求める
     def _calculate_all_combinations(self, instance, linkchunks):
-        combinations = [(self._calculate_arg_similar(icase, linkchunk), icase, linkchunk) for linkchunk in linkchunks for icase in instance.cases]
+        combinations = flatten(list(map(
+            lambda linkchunk: list(map(
+                lambda icase: (self._calculate_arg_similar(icase, linkchunk), icase, linkchunk),
+                instance.cases)),
+            linkchunks)))
         return combinations
 
     # 項類似度を算出

@@ -74,7 +74,7 @@ class Adjunct(object):
 
     @staticmethod
     def _parse_reason(chunk):
-        if any(m.surface in {"ので", "で"} for m in chunk.morphs):
+        if any(m.surface in ["ので", "で"] for m in chunk.morphs):
             return "原因" # "Reason"
         else:
             return ""

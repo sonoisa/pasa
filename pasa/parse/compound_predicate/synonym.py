@@ -17,7 +17,7 @@ class Synonym(object):
         return result
 
     # 形態素の木を作成
-    def _graphify(self, result):
+    def graphify(self, result):
         self._graphify_as_sequence(result)
         self._graphify_as_dependency(result)
 
@@ -49,7 +49,7 @@ class Synonym(object):
 
     @staticmethod
     def _get_morphs(result):
-        morphs = flatten([c.morphs for c in result.chunks])
+        morphs = flatten(list(map(lambda c: c.morphs, result.chunks)))
         return morphs
 
     # @todo すべての形態素を使用し連語の候補を取得した後，再びすべての形態素と候補でマッチングを行っている＜ーこれは無駄
@@ -63,7 +63,7 @@ class Synonym(object):
                 self._set_compound_predicate(compound_predicate, compound_predicate_morph)
 
     def _set_compound_predicate(self, compound_predicate, morphs):
-        chunks = distinct([m.chunk for m in morphs])
+        chunks = distinct(list(map(lambda m: m.chunk, morphs)))
 
         # 複合名詞述語のメイン部分の語義を上書き
         # メイン述語以外の部分の意味役割を上書き
@@ -85,7 +85,9 @@ class Synonym(object):
         return score
 
     def _get_candicate(self, morphs):
-        cand = distinct(flatten([[idiom for idiom in self.compound_predicates.dict if self._is_match_pattern(morph, idiom.patterns[-1])] for morph in morphs]))
+        cand = distinct(flatten(list(map(
+            lambda morph: [idiom for idiom in self.compound_predicates.dict if self._is_match_pattern(morph, idiom.patterns[-1])],
+            morphs))))
         return cand
 
     # 連語の同定

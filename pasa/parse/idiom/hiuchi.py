@@ -37,7 +37,7 @@ class Hiuchi(object):
     @staticmethod
     def _graphify_as_dependency(result):
         for chunk in result.chunks:
-            modifiedmorphs = [c.morphs[-1] for c in chunk.modifiedchunks]
+            modifiedmorphs = list(map(lambda c: c.morphs[-1], chunk.modifiedchunks))
             distinct_append(chunk.morphs[0].tree, modifiedmorphs)
 
     # 空白や接続詞などの関係ない形態素を除いたグラフ化
@@ -95,7 +95,7 @@ class Hiuchi(object):
             self.score = 0.0
 
     def _set_idiom(self, idiom, morphs):
-        chunks = distinct([m.chunk for m in morphs])
+        chunks = distinct(list(map(lambda m: m.chunk, morphs)))
         midiom = self.MyIdiom()
         midiom.entry = idiom.entry
         for chunk in chunks:
@@ -149,7 +149,7 @@ class Hiuchi(object):
     # resultよりすべての形態素を取得
     @staticmethod
     def _get_morphs(result):
-        morphs = flatten([c.morphs for c in result.chunks])
+        morphs = flatten(list(map(lambda c: c.morphs, result.chunks)))
         return morphs
 
     # 慣用句表記辞書内の1形態素分の一致判定
