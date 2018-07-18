@@ -1,0 +1,3 @@
+recursive-include pasa/json *.json
+include LICENSE
+exclude test/*
