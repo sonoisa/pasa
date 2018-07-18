@@ -6,11 +6,17 @@ class Result(object):
         self.chunks = []
         self.surface = line
 
-    def __repr__(self):
-        return str({
-            "surface": self.surface,
-            "chunks": self.chunks
-        })
-
     def add_chunk(self, chunk):
         self.chunks.append(chunk)
+
+    def to_dict(self):
+        return {
+            "surface": self.surface,
+            "chunks": [c.to_dict() for c in self.chunks]
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def __repr__(self):
+        return str(self.to_dict())

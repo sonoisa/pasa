@@ -7,14 +7,17 @@ class Category(object):
         self.name = name    # カテゴリ名
         self.confidence = confidence    # 確信度（0.0〜1.0）
 
-    def __str__(self):
-        return str({
+    def to_dict(self):
+        return {
             "name": self.name,
             "confidence": self.confidence
-        })
+        }
+
+    def __str__(self):
+        return str(self.to_dict())
 
     def __repr__(self):
-        return str(self)
+        return str(self.to_dict())
 
     @staticmethod
     def distinct_categories(categories):

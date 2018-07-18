@@ -11,11 +11,11 @@ import json
 
 
 class LoadJson(object):
-    def __init__(self, files):
-        self.categorys = category.Dict(json.load(open(files.category, 'r')))
-        self.ccharts = cchart.Dict(json.load(open(files.cchart, 'r')))
-        self.idioms = idiom.Dict(json.load(open(files.idiom, 'r')))
-        self.filters = filter.Dict(json.load(open(files.filter, 'r')))
-        self.frames = frame.Dict(json.load(open(files.frame, 'r')))
-        self.compoundPredicates = compound_predicate.Dict(json.load(open(files.compoundPredicate, 'r')))
-        self.nouns = noun.Dict(json.load(open(files.noun, 'r')))
+    def __init__(self, json_loader):
+        self.categorys = category.Dict(json.loads(json_loader.category_loader()))
+        self.ccharts = cchart.Dict(json.loads(json_loader.cchart_loader()))
+        self.idioms = idiom.Dict(json.loads(json_loader.idiom_loader()))
+        self.filters = filter.Dict(json.loads(json_loader.filter_loader()))
+        self.frames = frame.Dict(json.loads(json_loader.frame_loader()))
+        self.compound_predicates = compound_predicate.Dict(json.loads(json_loader.compound_predicate_loader()))
+        self.nouns = noun.Dict(json.loads(json_loader.noun_loader()))

@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .json_file import JsonFile
+from .json_loader import JsonLoader

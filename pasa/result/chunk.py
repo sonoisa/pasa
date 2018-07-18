@@ -48,7 +48,7 @@ class Chunk(object):
         self.noun_arg = ""
         self.noun_agentiveRole = ""
 
-    def __repr__(self):
+    def to_dict(self):
         if self.modifiedchunks:
             frame = [(str(modchunk.id) + "-" + "|".join(modchunk.semrole) + "-" + "|".join(modchunk.arg) if modchunk.semrole else str(modchunk.id) + "-" + modchunk.ctype) for modchunk in self.modifiedchunks]
         else:
@@ -59,39 +59,48 @@ class Chunk(object):
             for modchunk in self.modifiedchunks if modchunk.noun_arg
         ]
 
-        return str({
+        d = {
             "id": self.id,
-            "surface": self.surface,
-            "morphs": self.morphs,
             "link": self.link,
             "head": self.head,
-            "fanc": self.fanc,
-            "main": self.main,
-            "ctype": self.ctype,
-            "verb": self.verb,
-            "part": self.part,
-            "tense": self.tense,
-            "voice": self.voice,
-            "polarity": self.polarity,
-            "sentelem": self.sentelem,
-            "semantic": self.semantic,
-            "semrole": self.semrole,
-            "arg": self.arg,
-            "category": self.category,
-            "adjunct": self.adjunct,
-            "similar": self.similar,
-            "another_parts": self.another_parts,
-            "idiom": self.idiom,
-            "phrase": self.phrase,
-            "idiom_morph": self.idiom_morph,
-            "idiom_score": self.idiom_score,
-            "frame": frame,
-            "noun_agentiveL": self.noun_agentiveL,
-            "noun_semantic": self.noun_semantic,
-            "noun_semrole": self.noun_semrole,
-            "noun_arg": self.noun_arg,
-            "noun_agentiveRole": noun_agentive_role
-        })
+            "fanc": self.fanc
+        }
+
+        if self.surface: d["surface"] = self.surface
+        if [m.to_dict() for m in self.morphs]: d["morphs"] = [m.to_dict() for m in self.morphs]
+        if self.main: d["main"] = self.main
+        if self.ctype: d["ctype"] = self.ctype
+        if self.verb: d["verb"] = self.verb
+        if self.part: d["part"] = self.part
+        if self.tense: d["tense"] = self.tense
+        if self.voice: d["voice"] = self.voice
+        if self.polarity: d["polarity"] = self.polarity
+        if self.sentelem: d["sentelem"] = self.sentelem
+        if self.semantic: d["semantic"] = self.semantic
+        if self.semrole: d["semrole"] = self.semrole
+        if self.arg: d["arg"] = self.arg
+        if [c.to_dict() for c in self.category]: d["category"] = [c.to_dict() for c in self.category]
+        if self.adjunct: d["adjunct"] = self.adjunct
+        if self.similar > 0.0: d["similar"] = self.similar
+        if self.another_parts: d["another_parts"] = self.another_parts
+        if self.idiom: d["idiom"] = self.idiom
+        if self.phrase: d["phrase"] = self.phrase
+        if [m.to_dict() for m in self.idiom_morph]: d["idiom_morph"] = [m.to_dict() for m in self.idiom_morph]
+        if self.idiom_score > 0.0: d["idiom_score"] = self.idiom_score
+        if frame: d["frame"] = frame
+        if self.noun_agentiveL: d["noun_agentiveL"] = self.noun_agentiveL
+        if self.noun_semantic: d["noun_semantic"] = self.noun_semantic
+        if self.noun_semrole: d["noun_semrole"] = self.noun_semrole
+        if self.noun_arg: d["noun_arg"] = self.noun_arg
+        if noun_agentive_role: d["noun_agentiveRole"] = noun_agentive_role
+
+        return d
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def __repr__(self):
+        return str(self.to_dict())
 
     def add_morph(self, morph):
         self.morphs.append(morph)

@@ -16,7 +16,7 @@ class Parse(object):
         self.tagger = Tagger(dicts.ccharts)
         self.categorizer = Categorizer(dicts.categorys)
         self.idom = Hiuchi(dicts.idioms, dicts.filters)
-        self.compound_predicate = Synonym(dicts.compoundPredicates, dicts.filters)
+        self.compound_predicate = Synonym(dicts.compound_predicates, dicts.filters)
 
     def parse(self, line):
         result = self._parse_chunk(line)

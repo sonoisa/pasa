@@ -39,21 +39,28 @@ class Morph(object):
         if ne is not None:
             self.ne = ne
 
-    def __str__(self):
-        return str({
+    def to_dict(self):
+        d = {
             "id": self.id,
             "surface": self.surface,
-            "pos": self.pos,
-            "pos1": self.pos1,
-            "pos2": self.pos2,
-            "pos3": self.pos3,
-            "pos4": self.pos4,
-            "cform": self.cform,
-            "ctype": self.ctype,
             "base": self.base,
-            "read": self.read,
-            "ne": self.ne
-        })
+            "read": self.read
+        }
+
+        if self.pos: d["pos"] = self.pos
+        if self.pos1: d["pos1"] = self.pos1
+        if self.pos2: d["pos2"] = self.pos2
+        if self.pos3: d["pos3"] = self.pos3
+        if self.pos4: d["pos4"] = self.pos4
+        if self.cform: d["cform"] = self.cform
+        if self.ctype: d["ctype"] = self.ctype
+        if self.ne: d["ne"] = self.ne
+        if self.forms: d["forms"] = self.forms
+
+        return d
+
+    def __str__(self):
+        return str(self.to_dict())
 
     def __repr__(self):
-        return str(self)
+        return str(self.to_dict())
