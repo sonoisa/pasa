@@ -15,4 +15,6 @@ class Case(object):
         self.weight = get_or_else(yaml, 'weight', 0.0)
 
     def __repr__(self):
-        return "{{part={}, causative_part={}, passive_part={}, noun={}, category={}, semrole={}, arg={}, weight={}}}".format(self.part, self.causative_part, self.passive_part, self.noun, self.category, self.semrole, self.arg, self.weight)
+        return "{{part={}, causative_part={}, passive_part={}, noun={}, category={}, semrole={}, arg={}, weight={}}}"\
+            .format(self.part, self.causative_part, self.passive_part, self.noun, self.category, self.semrole,
+                    self.arg, self.weight)

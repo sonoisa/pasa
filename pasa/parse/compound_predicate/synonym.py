@@ -67,7 +67,7 @@ class Synonym(object):
 
         # 複合名詞述語のメイン部分の語義を上書き
         # メイン述語以外の部分の意味役割を上書き
-        score = self._filtering() #複合名詞と語義のどちらを選ぶかのスコアを判定（未実装）
+        score = self._filtering()  # 複合名詞と語義のどちらを選ぶかのスコアを判定（未実装）
         if score > 0.8:
             for chunk in chunks:
                 if chunk == chunks[-1]:
@@ -86,7 +86,8 @@ class Synonym(object):
 
     def _get_candicate(self, morphs):
         cand = distinct(flatten(list(map(
-            lambda morph: [idiom for idiom in self.compound_predicates.dict if self._is_match_pattern(morph, idiom.patterns[-1])],
+            lambda morph: [idiom for idiom in self.compound_predicates.dict
+                           if self._is_match_pattern(morph, idiom.patterns[-1])],
             morphs))))
         return cand
 

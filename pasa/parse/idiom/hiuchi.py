@@ -3,6 +3,7 @@
 from pasa.utils import *
 from pasa.result import Category
 
+
 # 慣用句同定のためのクラス
 # 以下の手順により同定
 # - 形態素のグラフ化
@@ -156,6 +157,8 @@ class Hiuchi(object):
     @staticmethod
     def _is_match_pattern(morph, pattern):
         for idcase in pattern.cases:
-            if (idcase.base == "" or idcase.base == morph.base) and (idcase.read == "" or idcase.read == morph.read) and (idcase.pos == "" or idcase.pos == morph.pos):
+            if (idcase.base == "" or idcase.base == morph.base) \
+                    and (idcase.read == "" or idcase.read == morph.read) \
+                    and (idcase.pos == "" or idcase.pos == morph.pos):
                 return True
         return False

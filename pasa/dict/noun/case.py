@@ -12,4 +12,5 @@ class Case(object):
         self.arg = get_or_else(yaml, 'arg', "")
 
     def __repr__(self):
-        return "{{noun={}, part={}, category={}, semrole={}, arg={}}}".format(self.noun, self.part, self.category, self.semrole, self.arg)
+        return "{{noun={}, part={}, category={}, semrole={}, arg={}}}".format(
+            self.noun, self.part, self.category, self.semrole, self.arg)

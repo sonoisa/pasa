@@ -12,4 +12,5 @@ class CompoundPredicate(object):
         self.semantic = get_or_else(yaml, 'semantic', "")
 
     def __repr__(self):
-        return "{{entry={}, phrase={}, patterns={}, semantic={}}}".format(self.entry, self.phrase, self.patterns, self.semantic)
+        return "{{entry={}, phrase={}, patterns={}, semantic={}}}".format(
+            self.entry, self.phrase, self.patterns, self.semantic)

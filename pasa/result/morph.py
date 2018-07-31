@@ -3,17 +3,17 @@
 
 class Morph(object):
     def __init__(self, m_id, surface, pos1, pos2, pos3, pos4, cform, ctype, base, read, ne):
-        self.id = m_id # 形態素のid
-        self.surface = surface # 形態素の表層
+        self.id = m_id  # 形態素のid
+        self.surface = surface  # 形態素の表層
         self.pos1 = ""
         self.pos2 = ""
         self.pos3 = ""
         self.pos4 = ""
-        self.base = base # 基本形
-        self.read = read # 読み
-        self.cform = "" # 活用形
-        self.ctype = "" # 活用型
-        self.ne = "" # 固有表現解析
+        self.base = base  # 基本形
+        self.read = read  # 読み
+        self.cform = ""  # 活用形
+        self.ctype = ""  # 活用型
+        self.ne = ""  # 固有表現解析
         self.tree = []
         self.chunk = None
         self.forms = []
@@ -35,7 +35,7 @@ class Morph(object):
             self.ctype = ctype
         if cform is not "*":
             self.cform = cform
-        self.pos = pos # 品詞，品詞細分類1，品詞細分類2，品詞細分類3
+        self.pos = pos  # 品詞，品詞細分類1，品詞細分類2，品詞細分類3
         if ne is not None:
             self.ne = ne
 
@@ -47,15 +47,24 @@ class Morph(object):
             "read": self.read
         }
 
-        if self.pos: d["pos"] = self.pos
-        if self.pos1: d["pos1"] = self.pos1
-        if self.pos2: d["pos2"] = self.pos2
-        if self.pos3: d["pos3"] = self.pos3
-        if self.pos4: d["pos4"] = self.pos4
-        if self.cform: d["cform"] = self.cform
-        if self.ctype: d["ctype"] = self.ctype
-        if self.ne: d["ne"] = self.ne
-        if self.forms: d["forms"] = self.forms
+        if self.pos:
+            d["pos"] = self.pos
+        if self.pos1:
+            d["pos1"] = self.pos1
+        if self.pos2:
+            d["pos2"] = self.pos2
+        if self.pos3:
+            d["pos3"] = self.pos3
+        if self.pos4:
+            d["pos4"] = self.pos4
+        if self.cform:
+            d["cform"] = self.cform
+        if self.ctype:
+            d["ctype"] = self.ctype
+        if self.ne:
+            d["ne"] = self.ne
+        if self.forms:
+            d["forms"] = self.forms
 
         return d
 

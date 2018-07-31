@@ -8,6 +8,7 @@ from .idiom import Hiuchi
 from .semantic import Sematter
 from .compound_predicate import Synonym
 
+
 class Parse(object):
     def __init__(self, dicts):
         self.analyzer = Analyzer()

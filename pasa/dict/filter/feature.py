@@ -12,4 +12,5 @@ class Feature(object):
         self.mood = get_or_else(yaml, 'mood', [])
 
     def __repr__(self):
-        return "{{polarity={}, category={}, sentelem={}, voice={}, mood={}}}".format(self.polarity, self.category, self.sentelem, self.voice, self.mood)
+        return "{{polarity={}, category={}, sentelem={}, voice={}, mood={}}}".format(
+            self.polarity, self.category, self.sentelem, self.voice, self.mood)

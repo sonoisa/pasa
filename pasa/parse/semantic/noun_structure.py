@@ -11,7 +11,8 @@ class NounStructure(object):
         frame = self.nouns.get_frame(chunk.main)
         if frame is not None:
             nounset = list(map(
-                lambda instance: self._calculate_snt_similar(instance, chunk, instance.agent[0] if instance.agent else None),
+                lambda instance: self._calculate_snt_similar(instance, chunk,
+                                                             instance.agent[0] if instance.agent else None),
                 frame.instance))
             nounset = max(nounset, key=itemgetter(0))
             self._set_semantic(chunk, nounset[2])
@@ -28,16 +29,15 @@ class NounStructure(object):
         similar = reduce(lambda s, i: s + i[0], insts, 0)
         return similar, insts, agent
 
-
     def _calculate_all_combinations(self, instance, chunk):
         chunks = [x for x in chunk.modifiedchunks]
         if chunk.modifyingchunk is not None:
             chunks.append(chunk.modifyingchunk)
 
         combinations = flatten(list(map(lambda c: list(map(
-            lambda icase: (self._calculate_arg_similar(icase, c), icase, c),
-            instance.cases)),
-        chunks)))
+                lambda icase: (self._calculate_arg_similar(icase, c), icase, c),
+                instance.cases)),
+            chunks)))
 
         return combinations
 

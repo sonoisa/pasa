@@ -9,7 +9,8 @@ class Dict(object):
     def is_frame(self, noun):
         if noun:
             for frame in self.dict:
-                if frame.head == noun or (frame.head + frame.support) == noun or frame.head == noun[0:-1] or (frame.head + frame.support) == noun[0:-1]:
+                if frame.head == noun or (frame.head + frame.support) == noun \
+                        or frame.head == noun[0:-1] or (frame.head + frame.support) == noun[0:-1]:
                     return True
             return False
         else:
@@ -18,7 +19,8 @@ class Dict(object):
     def get_frame(self, noun):
         if noun:
             for frame in self.dict:
-                if frame.head == noun or (frame.head + frame.support) == noun or frame.head == noun[0:-1] or (frame.head + frame.support) == noun[0:-1]:
+                if frame.head == noun or (frame.head + frame.support) == noun \
+                        or frame.head == noun[0:-1] or (frame.head + frame.support) == noun[0:-1]:
                     return frame
             return None
         else:

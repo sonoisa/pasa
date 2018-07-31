@@ -29,7 +29,7 @@ class Tagger(object):
         elif any(morph.base == "できる" and morph.pos.find("動詞,自立") >= 0 for morph in chunk.morphs):
             voice = "POTENTIAL"
         elif any((morph.base == "せる" and morph.pos.find("動詞,接尾") >= 0) or
-            (morph.base in ["もらう", "いただく"] and morph.pos.find("動詞,非自立") >= 0) for morph in chunk.morphs):
+                 (morph.base in ["もらう", "いただく"] and morph.pos.find("動詞,非自立") >= 0) for morph in chunk.morphs):
             voice = "CAUSATIVE"
         elif chunk.ctype is not "elem":
             voice = "ACTIVE"
@@ -45,7 +45,7 @@ class Tagger(object):
         if any(morph.pos.find("助動詞") >= 0 and morph.base in ["た", "き", "けり"] for morph in chunk.morphs):
             tense = "PAST"
         else:
-            tense = "PRESENT" # saitoh 2016/09/06 "" -> "PRESENT"
+            tense = "PRESENT"  # saitoh 2016/09/06 "" -> "PRESENT"
         return tense
 
     # 極性情報の解析と取得
@@ -54,7 +54,8 @@ class Tagger(object):
     # NEGATIVE:   否定
     @staticmethod
     def _parse_polarity(chunk):
-        if any(morph.pos.find("助動詞") >= 0 and (morph.base in ["ない", "ぬ"] or morph.base.find("まい") >= 0) for morph in chunk.morphs):
+        if any(morph.pos.find("助動詞") >= 0 and
+               (morph.base in ["ない", "ぬ"] or morph.base.find("まい") >= 0) for morph in chunk.morphs):
             polarity = "NEGATIVE"
         elif chunk.ctype != "elem":
             polarity = "AFFIRMATIVE"
@@ -78,9 +79,11 @@ class Tagger(object):
     @staticmethod
     def _parse_sent_elem(chunk):
         last = chunk.morphs[-1]
-        if last.cform.find("体言接続") >= 0 or last.pos.find("連体詞") >= 0 or last.pos.find("形容詞") >= 0 or (last.pos.find("助詞,連体化") >= 0 and last.base == "の"):
+        if last.cform.find("体言接続") >= 0 or last.pos.find("連体詞") >= 0 \
+                or last.pos.find("形容詞") >= 0 or (last.pos.find("助詞,連体化") >= 0 and last.base == "の"):
             sentelem = "ADNOMINAL"
-        elif last.cform.find("連用") >= 0 or last.pos.find("副詞") >= 0 or (last.base == "に" and last.pos.find("助詞,格助詞") >= 0):
+        elif last.cform.find("連用") >= 0 or last.pos.find("副詞") >= 0 \
+                or (last.base == "に" and last.pos.find("助詞,格助詞") >= 0):
             sentelem = "ADVERBIAL"
         elif chunk.modifyingchunk is None:
             sentelem = "PREDICATE"

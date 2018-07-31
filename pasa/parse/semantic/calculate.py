@@ -30,7 +30,8 @@ class Calculate(object):
         while any(m[0] > 0 for m in comb):
             max_inst = max(comb, key=itemgetter(0))
             insts.append(max_inst)
-            comb = list(filter(lambda arg: not ((arg[1].noun + arg[1].part) == (max_inst[1].noun + max_inst[1].part) or arg[2] == max_inst[2]), comb))
+            comb = list(filter(lambda arg: not ((arg[1].noun + arg[1].part) == (max_inst[1].noun + max_inst[1].part)
+                                                or arg[2] == max_inst[2]), comb))
 
         similar = reduce(lambda s, i: s + i[0], insts, 0.0)
         return semantic, similar, insts
@@ -61,7 +62,7 @@ class Calculate(object):
         else:
             return 0.0
 
-    #　名詞の表層による類似度
+    # 名詞の表層による類似度
     @staticmethod
     def _get_surf_similar(icase, chunk):
         surf = chunk.main
@@ -80,9 +81,9 @@ class Calculate(object):
             if chunk.part == part:
                 return 1.0
             elif part == "は" and chunk.part == "が":
-                return 1.1 # シソーラスの格が"は"のとき"が"
+                return 1.1  # シソーラスの格が"は"のとき"が"
             elif part == "は" and chunk.part == "を":
-                return 1.1 # シソーラスの格が"は"のとき"を"
+                return 1.1  # シソーラスの格が"は"のとき"を"
             elif part in chunk.another_parts:
                 return 1.0
             elif chunk.modifyingchunk:

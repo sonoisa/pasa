@@ -2,7 +2,7 @@
 
 
 class Result(object):
-    def __init__(self, line = None):
+    def __init__(self, line=None):
         self.chunks = []
         self.surface = line
 

@@ -12,4 +12,5 @@ class Agent(object):
         self.arg2 = get_or_else(yaml, 'arg2', "")
 
     def __repr__(self):
-        return "{{agentive={}, semantic={}, arg0={}, arg1={}, arg2={}}}".format(self.agentive, self.semantic, self.arg0, self.arg1, self.arg2)
+        return "{{agentive={}, semantic={}, arg0={}, arg1={}, arg2={}}}".format(
+            self.agentive, self.semantic, self.arg0, self.arg1, self.arg2)

@@ -2,6 +2,7 @@
 
 import re
 
+
 class Basic(object):
     def __init__(self, frames):
         self.frames = frames
@@ -49,7 +50,8 @@ class Basic(object):
     @staticmethod
     def _get_chunk_type(chunk, is_last):
         morphs = chunk.morphs
-        if any(m.pos.find("動詞,自立") >= 0 for m in morphs) or (is_last and morphs[-1].pos == "名詞,サ変接続"): # サ変名詞の体言止めも動詞として扱う
+        if any(m.pos.find("動詞,自立") >= 0 for m in morphs) \
+                or (is_last and morphs[-1].pos == "名詞,サ変接続"):  # サ変名詞の体言止めも動詞として扱う
             return "verb"
         elif any(re.search(r"形容詞|形容詞,自立|形容動詞語幹", m.pos) for m in morphs):
             return "adjective"

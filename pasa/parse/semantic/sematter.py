@@ -6,6 +6,7 @@ from .adjunct import Adjunct
 from .calculate import Calculate
 from pasa.result import Category
 
+
 class Sematter(object):
     def __init__(self, frames, categorys, nouns):
         self.frames = frames
@@ -89,12 +90,11 @@ class Sematter(object):
             linkchunks = [c for c in verbchunk.modifiedchunks]
             if verbchunk.modifyingchunk.ctype == "elem":
                 can = set(map(lambda c: c.part, verbchunk.modifiedchunks))
-                verbchunk.modifyingchunk.another_parts =[p for p in ["が","を","に"] if p not in can]
+                verbchunk.modifyingchunk.another_parts = [p for p in ["が", "を", "に"] if p not in can]
                 linkchunks.append(verbchunk.modifyingchunk)
             return linkchunks
         else:
             return verbchunk.modifiedchunks
-
 
     # 曖昧性を解消したフレームのデータより語義を付与
     # @param semantic Calcurateクラスより取得したデータ
