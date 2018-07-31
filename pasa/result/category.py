@@ -3,14 +3,19 @@ from pasa.utils import distinct
 
 
 class Category(object):
-    def __init__(self, name, confidence):
+    REASON_DICT = "dict"    # 辞書が判定理由
+    REASON_POS = "pos"      # 品詞が判定理由
+
+    def __init__(self, name, confidence, reason):
         self.name = name    # カテゴリ名
         self.confidence = confidence    # 確信度（0.0〜1.0）
+        self.reason = reason    # 判定理由
 
     def to_dict(self):
         return {
             "name": self.name,
-            "confidence": self.confidence
+            "confidence": self.confidence,
+            "reason": self.reason
         }
 
     def __str__(self):

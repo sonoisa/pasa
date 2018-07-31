@@ -11,7 +11,7 @@ class Dict(object):
 
     def get_cates(self, noun):
         category_names = distinct([category.category_name for category in self.dict if noun in category.noun])
-        return [Category(name, 1.0) for name in category_names]
+        return [Category(name, 1.0, Category.REASON_DICT) for name in category_names]
 
     def __repr__(self):
         return "{{dict={}}}".format(self.dict)
