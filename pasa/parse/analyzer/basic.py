@@ -14,7 +14,9 @@ class Basic(object):
             chunk.modifyingchunk = self._get_modifying_chunk(result, chunk)
             chunk.modifiedchunks = self._get_modified_chunks(result, chunk)
             chunk.ctype = self._get_chunk_type(chunk, chunk is last_chunk)
-            chunk.main = self._get_head(chunk)
+            main, main_morphs = self._get_head(chunk)
+            chunk.main = main
+            chunk.main_morphs = main_morphs
             chunk.part = self._get_part(chunk)
             for morph in chunk.morphs:
                 morph.chunk = chunk
@@ -64,53 +66,59 @@ class Basic(object):
     def _get_head(self, chunk):
         ctype = chunk.ctype
         if ctype == "copula":
-            return "".join([(m.surface if m.base == "*" else m.base) for m in chunk.morphs if m.pos.find("名詞") >= 0])
+            main_morphs = [m for m in chunk.morphs if m.pos.find("名詞") >= 0]
+            return "".join([(m.surface if m.base == "*" else m.base) for m in main_morphs]), main_morphs
         elif ctype == "verb":
             morphs = [m for m in chunk.morphs if m.base == "する"]
             if morphs:
                 morph = morphs[0]
-                sahen = [m.surface for m in chunk.morphs if m.id < morph.id]
+                sahen = [m for m in chunk.morphs if m.id < morph.id]
                 if sahen:
-                    predicate = "".join(sahen[-2:]) + "する"
+                    predicate = "".join([s.surface for s in sahen[-2:]]) + "する"
                     if self.frames.is_frame(predicate):
-                        return predicate
+                        return predicate, sahen[-2:] + [morph]
                     else:
-                        return sahen[-1] + "する"
+                        return sahen[-1].surface + "する", sahen[-1:] + [morph]
                 else:
-                    return "する"
+                    return "する", [morph]
             elif any(m.pos.find("動詞,自立") >= 0 for m in chunk.morphs):
                 morph = [m for m in chunk.morphs if m.pos == "動詞,自立"][0]
                 morphs = [m for m in chunk.morphs if m.pos1 == "動詞" and m.id == morph.id + 1]
                 if morphs:
                     predicate = morph.surface + morphs[0].base
+                    main_morphs = [morph, morphs[0]]
                 else:
-                    predicate = "".join([m.surface for m in chunk.morphs if m.id == morph.id - 1]) + morph.base
+                    premorphs = [m for m in chunk.morphs if m.id == morph.id - 1]
+                    predicate = "".join([m.surface for m in premorphs]) + morph.base
+                    main_morphs = [premorphs] + [morph]
                 if self.frames.is_frame(predicate):
-                    return predicate
+                    return predicate, main_morphs
                 else:
-                    return morph.base
+                    return morph.base, [morph]
             elif chunk.morphs[-1].pos == "名詞,サ変接続":
-                sahen = [m.surface for m in chunk.morphs]
-                predicate = "".join(sahen[-2:])
+                sahen = [m for m in chunk.morphs]
+                predicate = "".join([s.surface for s in sahen[-2:]])
                 if self.frames.is_frame(predicate):
-                    return predicate
+                    return predicate, sahen[-2:]
                 predicate += "する"
                 if self.frames.is_frame(predicate):
-                    return predicate
+                    return predicate, sahen[-2:]
                 else:
-                    return sahen[-1]
+                    return sahen[-1], sahen[-1:]
             else:
                 raise ValueError("illegal state")
         elif ctype == "adjective":
             morph = [m for m in chunk.morphs if re.search(r"形容詞|形容詞,自立|形容動詞語幹", m.pos)][0]
             if morph.pos.find("形容詞") >= 0:
-                return morph.base
+                return morph.base, [morph]
             elif morph.pos.find("形容詞,自立") >= 0:
-                return morph.base
+                return morph.base, [morph]
             else:
-                return "".join([m.surface for m in chunk.morphs if m.id == morph.id - 1]) + morph.base + "だ"
+                premorphs = [m for m in chunk.morphs if m.id == morph.id - 1]
+                return "".join([m.surface for m in premorphs]) + morph.base + "だ", premorphs + [morph]
         elif ctype == "elem":
-            return "".join([m.surface for m in chunk.morphs if re.search(r"名詞|副詞", m.pos)])
+            main_morphs = [m for m in chunk.morphs if re.search(r"名詞|副詞", m.pos)]
+            return "".join([m.surface for m in main_morphs]), main_morphs
 
     # 文節内の名詞につく格助詞の取得
     # @param chunk 文節

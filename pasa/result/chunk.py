@@ -17,6 +17,7 @@ class Chunk(object):
         self.score = score  # 係り関係のスコア
         # 整理により付与する情報
         self.main = ""
+        self.main_morphs = []
         self.ctype = ""
         self.verb = ""
         self.part = ""  # 名詞につく格の情報
@@ -76,6 +77,8 @@ class Chunk(object):
             d["morphs"] = [m.to_dict() for m in self.morphs]
         if self.main:
             d["main"] = self.main
+        if self.main_morphs:
+            d["main_morphs"] = self.main_morphs
         if self.ctype:
             d["ctype"] = self.ctype
         if self.verb:
