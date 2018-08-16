@@ -90,7 +90,7 @@ class Basic(object):
                 else:
                     premorphs = [m for m in chunk.morphs if m.id == morph.id - 1]
                     predicate = "".join([m.surface for m in premorphs]) + morph.base
-                    main_morphs = [premorphs] + [morph]
+                    main_morphs = premorphs + [morph]
                 if self.frames.is_frame(predicate):
                     return predicate, main_morphs
                 else:
