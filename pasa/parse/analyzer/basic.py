@@ -104,7 +104,7 @@ class Basic(object):
                 if self.frames.is_frame(predicate):
                     return predicate, sahen[-2:]
                 else:
-                    return sahen[-1], sahen[-1:]
+                    return sahen[-1].surface, sahen[-1:]
             else:
                 raise ValueError("illegal state")
         elif ctype == "adjective":
