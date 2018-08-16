@@ -78,7 +78,7 @@ class Chunk(object):
         if self.main:
             d["main"] = self.main
         if self.main_morphs:
-            d["main_morphs"] = self.main_morphs
+            d["main_morphs"] = [m.to_dict() for m in self.main_morphs]
         if self.ctype:
             d["ctype"] = self.ctype
         if self.verb:
