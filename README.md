@@ -7,6 +7,8 @@
 ## 実行に必要な環境
 
 - python 3.6+
+- mecab
+- cabocha
 - cabochaのpythonバインディング: https://github.com/taku910/cabocha/tree/master/python/
   - インストール方法  
 <pre>
