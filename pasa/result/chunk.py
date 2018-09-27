@@ -93,6 +93,8 @@ class Chunk(object):
             d["polarity"] = self.polarity
         if self.sentelem:
             d["sentelem"] = self.sentelem
+        if self.mood:
+            d["mood"] = self.mood
         if self.semantic:
             d["semantic"] = self.semantic
         if self.semrole:
