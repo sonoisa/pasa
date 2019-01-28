@@ -34,7 +34,7 @@ setup(
     author='Isao Sonobe',
     author_email='sonoisa@gmail.com',
     url='https://github.com/sonoisa/pasa/',
-    version='0.1.7',
+    version='0.1.8',
     install_requires=[],
     dependency_links=['https://github.com/taku910/cabocha/tree/master/python/'],
     zip_safe=True
