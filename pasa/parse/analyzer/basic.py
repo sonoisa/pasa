@@ -8,18 +8,19 @@ class Basic(object):
         self.frames = frames
 
     def parse(self, result):
-        last_chunk = result.chunks[-1]
-        for chunk in result.chunks:
-            chunk.surface = self._get_chunk_surface(chunk)
-            chunk.modifyingchunk = self._get_modifying_chunk(result, chunk)
-            chunk.modifiedchunks = self._get_modified_chunks(result, chunk)
-            chunk.ctype = self._get_chunk_type(chunk, chunk is last_chunk)
-            main, main_morphs = self._get_head(chunk)
-            chunk.main = main
-            chunk.main_morphs = main_morphs
-            chunk.part = self._get_part(chunk)
-            for morph in chunk.morphs:
-                morph.chunk = chunk
+        if result.chunks:
+            last_chunk = result.chunks[-1]
+            for chunk in result.chunks:
+                chunk.surface = self._get_chunk_surface(chunk)
+                chunk.modifyingchunk = self._get_modifying_chunk(result, chunk)
+                chunk.modifiedchunks = self._get_modified_chunks(result, chunk)
+                chunk.ctype = self._get_chunk_type(chunk, chunk is last_chunk)
+                main, main_morphs = self._get_head(chunk)
+                chunk.main = main
+                chunk.main_morphs = main_morphs
+                chunk.part = self._get_part(chunk)
+                for morph in chunk.morphs:
+                    morph.chunk = chunk
         return result
 
     # 文節内の形態素の表層をつなげて，文節の表層を取得
