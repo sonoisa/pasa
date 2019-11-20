@@ -19,12 +19,14 @@ class Parse(object):
         self.idom = Hiuchi(dicts.idioms, dicts.filters)
         self.compound_predicate = Synonym(dicts.compound_predicates, dicts.filters)
 
-    def parse(self, line):
+    def parse(self, line, parse_idiom=True, parse_compound_predicate=True):
         result = self._parse_chunk(line)
         result = self._parse_feature(result)
-        result = self._parse_idiom(result)
+        if parse_idiom:
+            result = self._parse_idiom(result)
         result = self._parse_semantic(result)
-        result = self._parse_compound_predicate(result)
+        if parse_compound_predicate:
+            result = self._parse_compound_predicate(result)
         return result
 
     def _parse_chunk(self, line):
