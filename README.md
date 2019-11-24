@@ -11,9 +11,14 @@
 - cabocha
 - cabochaのpythonバインディング: https://github.com/taku910/cabocha/tree/master/python/
   - インストール方法  
-<pre>
-curl -OL https://github.com/taku910/cabocha/archive/master.zip
-unzip master.zip  
-cd cabocha-master  
-pip install python/  
-</pre>
+    <pre>
+    pip install git+https://github.com/taku910/cabocha.git#subdirectory=python
+    </pre>  
+    または  
+    <pre>
+    curl -OL https://github.com/taku910/cabocha/archive/master.zip
+    unzip master.zip  
+    cd cabocha-master  
+    pip install python/  
+    </pre>
+  
